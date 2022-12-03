@@ -2,6 +2,13 @@
 
 import random,math,time
 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.ticker import AutoMinorLocator
+
+
+
 
 def deck(tcollection):
     collection = []
@@ -10,6 +17,7 @@ def deck(tcollection):
             collection.append(i+1)
 
     return collection
+
 
 
 def carte_random(tcollection,doublons,carte_tire):
@@ -24,6 +32,7 @@ def carte_random(tcollection,doublons,carte_tire):
             
             
     return carte
+
 
 
 def test(tcollection,nbr_carte,nbr_test):
@@ -75,32 +84,106 @@ def test(tcollection,nbr_carte,nbr_test):
     l_tour.sort()
     return moy_tour,moy_doublons,min_tour,max_tour,start_time,l_tour
 
+
+
 def pourcentage(l_tour):
     l_pourcentage = []
+    l_occurence = []
     #print(l_tour)
     x = 1
-    for i in range(len(l_tour)-1):
-        if(l_tour[i] == l_tour[i+1]):
-            x = x +1
-        else:
+    for i in range(len(l_tour)):
+        if(i == len(l_tour)-1):
             l_pourcentage.append((x / len(l_tour))*100)
+            l_occurence.append(x)
             x = 1
-    return l_pourcentage
+        else:
+            if(l_tour[i] == l_tour[i+1]):
+                x = x +1
+            else:
+                l_pourcentage.append((x / len(l_tour))*100)
+                l_occurence.append(x)
+                x = 1
+    return l_pourcentage,l_occurence
+
+
+
+def graph_occurence(l_tour,l_occurence,max_tour,min_theorique):
+    l_tour = list(dict.fromkeys(l_tour))
+
+    x = np.linspace(0, 2 * np.pi, 200)
+    y = np.sin(x)
+    fig, ax = plt.subplots()
+    ax.bar(l_tour,l_occurence, linewidth=2.0)
+    ax.set(xticks=np.arange(min_theorique,max_tour+1,5))
+    ax.set(yticks=np.arange(0,max(l_occurence),5))
+    ax.xaxis.set_minor_locator(AutoMinorLocator())
+    ax.yaxis.set_minor_locator(AutoMinorLocator())
+    ax.set_xlabel("Nombres d'achats")
+    ax.set_ylabel("Occurence")
+    ax.set_title("Occurence du nombres d'Achats")
+    plt.show()
+
+
+
+def graph_pourcentage(l_tour,l_pourcentage,max_tour,min_theorique):
+    l_tour = list(dict.fromkeys(l_tour))
+
+    x = np.linspace(0, 2 * np.pi, 200)
+    y = np.sin(x)
+    fig, ax = plt.subplots()
+    ax.plot(l_tour,l_pourcentage, linewidth=2.0)
+    ax.set(xticks=np.arange(min_theorique,max_tour+1,5))
+    ax.set(yticks=np.arange(0,100,5))
+    ax.xaxis.set_minor_locator(AutoMinorLocator())
+    ax.yaxis.set_minor_locator(AutoMinorLocator())
+    ax.set_xlabel("Nombres d'achats")
+    ax.set_ylabel("Pourcentage")
+    ax.set_title("Occurence du nombres d'Achats")
+    plt.show()
+
+
+def graph_pourcentage2(l_tour,l_pourcentage,max_tour,min_theorique):
+    l_tour = list(dict.fromkeys(l_tour))
+    l_pourcentage2 = []
+    x = 0
+    for i in range(len(l_pourcentage)):
+        l_pourcentage2.append(l_pourcentage[i] + x)
+        x = x + l_pourcentage[i]
+
+    x = np.linspace(0, 2 * np.pi, 200)
+    y = np.sin(x)
+    fig, ax = plt.subplots()
+    ax.plot(l_tour,l_pourcentage2, linewidth=2.0)
+    ax.set(xticks=np.arange(min_theorique,max_tour+1,5))
+    ax.set(yticks=np.arange(0,sum(l_pourcentage),5))
+    ax.xaxis.set_minor_locator(AutoMinorLocator())
+    ax.yaxis.set_minor_locator(AutoMinorLocator())
+    ax.set_xlabel("Nombres d'achats")
+    ax.set_ylabel("Pourcentage")
+    ax.set_title("Chance d'avoire une collection complete")
+    plt.show()
+
+
+
 
 doublons = str(input("Voulez vous avoire des doublons dans chaque packs ?:oui/non:"))
 nbr_test = int(input("Saisir le nombre de test a faire:"))
 tcollection = int(input("Saisir le nombre de carte dans la collection:"))
 nbr_carte = int(input("Saisir le nombre de carte obtenue a chaque achat:"))
-moy_tour,moy_doublons,min,max,start_time,l_tour = test(tcollection,nbr_carte,nbr_test)
+moy_tour,moy_doublons,min_tour,max_tour,start_time,l_tour = test(tcollection,nbr_carte,nbr_test)
+min_theorique = math.ceil(tcollection / nbr_carte)
 
 print("Il faudra en moyenne",round(moy_tour),"(",moy_tour,")","achats pour avoire la collection complete")
-print("Le nombre de tours maximum a etait de:",max,"tours")
-print("Le nombre de tours minimum a etait de:",min,"tours")
-print("Le nombre minimum théorique d'achats est:",math.ceil(tcollection / nbr_carte))
+print("Le nombre de tours maximum a etait de:",max_tour,"tours")
+print("Le nombre de tours minimum a etait de:",min_tour,"tours")
+print("Le nombre minimum théorique d'achats est:",min_theorique)
 print("Le nombre moyen de doublons a eté de:",round(moy_doublons))
 print("--- %s seconds ---" % (time.time() - start_time))
 
-l_pourcentage = pourcentage(l_tour)
+l_pourcentage,l_occurence = pourcentage(l_tour)
 #print(l_pourcentage)
 print("la somme est:",sum(l_pourcentage))
+
+graph_occurence(l_tour,l_occurence,max_tour,min_theorique)
+graph_pourcentage2(l_tour,l_pourcentage,max_tour,min_theorique)
 
