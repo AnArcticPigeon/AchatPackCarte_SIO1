@@ -155,7 +155,7 @@ def graph_pourcentage2(l_tour,l_pourcentage,max_tour,min_theorique):
     fig, ax = plt.subplots()
     ax.plot(l_tour,l_pourcentage2, linewidth=2.0)
     ax.set(xticks=np.arange(min_theorique,max_tour+1,5))
-    ax.set(yticks=np.arange(0,sum(l_pourcentage),5))
+    ax.set(yticks=np.arange(0,100,5))
     ax.xaxis.set_minor_locator(AutoMinorLocator())
     ax.yaxis.set_minor_locator(AutoMinorLocator())
     ax.set_xlabel("Nombres d'achats")
