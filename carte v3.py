@@ -166,14 +166,14 @@ def graph_pourcentage2(l_tour,l_pourcentage,max_tour,min_theorique):
 
 
 
-doublons = str(input("Voulez vous avoire des doublons dans chaque packs ?:oui/non:"))
+doublons = str(input("Voulez vous avoir des doublons dans chaque packs ?:oui/non:"))
 nbr_test = int(input("Saisir le nombre de test a faire:"))
 tcollection = int(input("Saisir le nombre de carte dans la collection:"))
 nbr_carte = int(input("Saisir le nombre de carte obtenue a chaque achat:"))
 moy_tour,moy_doublons,min_tour,max_tour,start_time,l_tour = test(tcollection,nbr_carte,nbr_test)
 min_theorique = math.ceil(tcollection / nbr_carte)
 
-print("Il faudra en moyenne",round(moy_tour),"(",moy_tour,")","achats pour avoire la collection complete")
+print("Il faudra en moyenne",round(moy_tour),"(",moy_tour,")","achats pour avoir la collection complete")
 print("Le nombre de tours maximum a etait de:",max_tour,"tours")
 print("Le nombre de tours minimum a etait de:",min_tour,"tours")
 print("Le nombre minimum théorique d'achats est:",min_theorique)
