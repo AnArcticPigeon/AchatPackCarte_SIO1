@@ -1,7 +1,6 @@
 
 
 import random,math,time
-
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,32 +8,30 @@ from matplotlib.ticker import AutoMinorLocator
 
 
 
-
+#fonction creant une liste contenant de 1 au nombre totale de carte dans la colection
 def deck(tcollection):
     collection = []
-
     for i in range(tcollection):
             collection.append(i+1)
-
     return collection
 
 
-
+#fonction tirant un nombre aléatoire("une carte") de 1 au nombre totale de carte dans la collection
 def carte_random(tcollection,doublons,carte_tire):
     carte = -1
-
+    #si on peut avoir des doublons dans chaque achat alor on tire un nombre aléatoire
     if(doublons == "oui"):
         carte = random.randrange(1,tcollection+1)
 
+    #sinon on tire un nombre("une carte") qui n'est pas deja presente dans la liste carte_tire
     else:
+        #tire une nouvelle carte si la carte tiré a deja etait tiré 
         while(carte in carte_tire or carte == -1):
             carte = random.randrange(1,tcollection+1)
-            
-            
     return carte
 
 
-
+#fonction principale
 def test(tcollection,nbr_carte,nbr_test):
     start_time = time.time()
     l_tour = []
@@ -46,28 +43,25 @@ def test(tcollection,nbr_carte,nbr_test):
     for i in range(nbr_test):
         nbr_tour = 0
         nbr_doublons = 0
+        #creer une liste de 1 au nombre totale decarte dnas la collection
         collection = deck(tcollection)
 
         #Boucle:Tant Que la collection n'est pas complete
         while (len(collection) > 0):
-            #print(collection)
             carte_tire = []
             
-
             #Boucle: Nombre de carte obtenue a chaque achat
             for x in range(nbr_carte):
                 carte = carte_random(tcollection,doublons,carte_tire)
                 carte_tire.append(carte)
                 #print("La carte",x +1,"sur",nbr_carte,"est la carte:",carte)
 
-                #Cherche si la carte obtenue dans la collection et la suprime si elle est presente
-                for c in collection:
-                    if(c == carte):
-                        collection.remove(carte)
-                        break
+                #Boucle: Cherche si la carte obtenue est dans la liste collection et la suprime si elle est presente
+                if(carte in collection):
+                    collection.remove(carte)
 
                 nbr_doublons = nbr_doublons + 1
-            #print("liste des carte contenue dans le pack",carte_tire)
+            #print("liste des carte contenue dans l'achat",carte_tire)
                   
             nbr_tour += 1 
         l_doublons.append(nbr_doublons)        
@@ -85,11 +79,10 @@ def test(tcollection,nbr_carte,nbr_test):
     return moy_tour,moy_doublons,min_tour,max_tour,start_time,l_tour
 
 
-
+#fonction utilisé pour les graphes, renvoie 
 def pourcentage(l_tour):
     l_pourcentage = []
     l_occurence = []
-    #print(l_tour)
     x = 1
     for i in range(len(l_tour)):
         if(i == len(l_tour)-1):
@@ -166,14 +159,14 @@ def graph_pourcentage2(l_tour,l_pourcentage,max_tour,min_theorique):
 
 
 
-doublons = str(input("Voulez vous avoir des doublons dans chaque packs ?:oui/non:"))
-nbr_test = int(input("Saisir le nombre de test a faire:"))
-tcollection = int(input("Saisir le nombre de carte dans la collection:"))
-nbr_carte = int(input("Saisir le nombre de carte obtenue a chaque achat:"))
+doublons = str(input("Voulez vous avoir des doublons dans chaque achats ?:oui/non: "))
+nbr_test = int(input("Saisir le nombre de test a faire: "))
+tcollection = int(input("Saisir le nombre de carte dans la collection: "))
+nbr_carte = int(input("Saisir le nombre de carte obtenue a chaque achat: "))
 moy_tour,moy_doublons,min_tour,max_tour,start_time,l_tour = test(tcollection,nbr_carte,nbr_test)
 min_theorique = math.ceil(tcollection / nbr_carte)
 
-print("Il faudra en moyenne",round(moy_tour),"(",moy_tour,")","achats pour avoir la collection complete")
+print("Il faudra en moyenne",math.ceil(moy_tour),"(",moy_tour,")","achats pour avoir la collection complete")
 print("Le nombre de tours maximum a etait de:",max_tour,"tours")
 print("Le nombre de tours minimum a etait de:",min_tour,"tours")
 print("Le nombre minimum théorique d'achats est:",min_theorique)
