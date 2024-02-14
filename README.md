@@ -1,2 +1,3 @@
 # cartes.py
-programe python pour math calculant le nombre d'achat moyent de pack decarte pour avoire la collection complete
+Programme Python réalisé en SIO1 pour le cours de Mathématiques. 
+Calcule le nombre moyen d’achats de packs de cartes nécessaires pour obtenir une collection complète de cartes.
